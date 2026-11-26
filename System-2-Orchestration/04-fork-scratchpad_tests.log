@@ -1,5 +1,5 @@
 ============================= test session starts ==============================
-platform linux -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0 -- /voc/work/py3.13-exercises-and-project/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/01-loop/solution/.venv/bin/python3.13
+platform linux -- Python 3.13.18, pytest-8.4.2, pluggy-1.7.0 -- /voc/data/py313-venv/bin/python
 cachedir: .pytest_cache
 rootdir: /voc/work/py3.13-exercises-and-project/Build a Multi-Shift Quality Monitoring System with Claude Orchestration/04-fork-scratchpad/solution
 configfile: pyproject.toml
@@ -40,4 +40,4 @@ tests/test_us04_fork_scratchpad.py::test_fork_for_hypothesis_copies_state_withou
 tests/test_us04_fork_scratchpad.py::test_two_forks_produce_independent_scratchpads PASSED [ 96%]
 tests/test_us04_fork_scratchpad.py::test_merge_findings_appends_without_rewriting_existing PASSED [100%]
 
-============================== 33 passed in 1.59s ==============================
+============================== 33 passed in 1.14s ==============================
