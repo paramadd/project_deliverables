@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0 -- /voc/work/py3.13-exercises-and-project/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/01-loop/solution/.venv/bin/python3.13
+cachedir: .pytest_cache
+rootdir: /voc/work/py3.13-exercises-and-project/Build a Multi-Shift Quality Monitoring System with Claude Orchestration/03-crash-recovery/solution
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 29 items
+
+tests/test_us01_tiered_state.py::test_hotstate_roundtrip_and_size_budget PASSED [  3%]
+tests/test_us01_tiered_state.py::test_hotstate_rejects_more_than_20_hashes PASSED [  6%]
+tests/test_us01_tiered_state.py::test_hotstate_atomic_write PASSED       [ 10%]
+tests/test_us01_tiered_state.py::test_warmstore_creates_table_and_index PASSED [ 13%]
+tests/test_us01_tiered_state.py::test_warmstore_insert_many_roundtrips PASSED [ 17%]
+tests/test_us01_tiered_state.py::test_coldstore_writes_monthly_summary PASSED [ 20%]
+tests/test_us01_tiered_state.py::test_coldstore_handles_empty_month PASSED [ 24%]
+tests/test_us01_tiered_state.py::test_defects_since_uses_index_and_does_not_load_full_table PASSED [ 27%]
+tests/test_us01_tiered_state.py::test_defects_since_respects_limit PASSED [ 31%]
+tests/test_us02_invocation_pipeline.py::test_gather_new_defects_is_pure_passthrough_to_sql PASSED [ 34%]
+tests/test_us02_invocation_pipeline.py::test_gather_new_defects_has_no_python_side_filtering PASSED [ 37%]
+tests/test_us02_invocation_pipeline.py::test_invocation_shapes_are_distinct PASSED [ 41%]
+tests/test_us02_invocation_pipeline.py::test_build_rich_prompt_stays_under_4000_chars PASSED [ 44%]
+tests/test_us02_invocation_pipeline.py::test_run_shift_invokes_client_exactly_once_and_writes_state PASSED [ 48%]
+tests/test_us02_invocation_pipeline.py::test_run_shift_cli_entry_point_works PASSED [ 51%]
+tests/test_us03_crash_recovery.py::test_append_step_writes_and_fsyncs PASSED [ 55%]
+tests/test_us03_crash_recovery.py::test_mid_write_read_reveals_prior_complete_lines PASSED [ 58%]
+tests/test_us03_crash_recovery.py::test_load_returns_incomplete_state PASSED [ 62%]
+tests/test_us03_crash_recovery.py::test_load_returns_complete_state PASSED [ 65%]
+tests/test_us03_crash_recovery.py::test_load_on_missing_file_returns_empty PASSED [ 68%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_truth_table[1-False-resume] PASSED [ 72%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_truth_table[29-False-resume] PASSED [ 75%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_truth_table[30-False-resume] PASSED [ 79%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_truth_table[31-False-fresh] PASSED [ 82%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_truth_table[1-True-fresh] PASSED [ 86%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_truth_table[60-True-fresh] PASSED [ 89%]
+tests/test_us03_crash_recovery.py::test_recovery_decide_empty_manifest_is_fresh PASSED [ 93%]
+tests/test_us03_crash_recovery.py::test_threshold_constant_is_30_minutes PASSED [ 96%]
+tests/test_us03_crash_recovery.py::test_resumed_prompt_has_both_sections PASSED [100%]
+
+============================== 29 passed in 1.48s ==============================

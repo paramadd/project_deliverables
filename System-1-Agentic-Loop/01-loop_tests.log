@@ -1,0 +1,303 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0
+rootdir: /voc/work/py3.13-exercises-and-project/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/01-loop/solution
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collected 29 items
+
+tests/test_antipatterns.py FFFF                                          [ 13%]
+tests/test_fixtures.py ........                                          [ 41%]
+tests/test_loop.py .....                                                 [ 58%]
+tests/test_tools.py FFFFFFFFFFF.                                         [100%]
+
+=================================== FAILURES ===================================
+________________ test_no_string_membership_against_text_in_loop ________________
+
+    def test_no_string_membership_against_text_in_loop() -> None:
+        """No `"some_token" in <something>` expressions in loop.py.
+    
+        Heuristic: any `ast.Compare` node using `ast.In` whose `left` operand is a
+        string `ast.Constant` is flagged. The loop has no legitimate reason to test
+        for the presence of a magic string inside the model's output — that would be
+        natural-language-driven control flow.
+        """
+        # TODO:Parse LOOP_PY into an AST. Walk every node. For each
+        # ast.Compare, look at its `ops` — if any op is ast.In AND `node.left` is an
+        # ast.Constant holding a `str`, append `ast.unparse(node)` to an offenders list.
+        # Assert the offenders list is empty; include the offending expressions in the
+        # failure message so a reader can find the bad line.
+>       raise NotImplementedError("Exercise 2: write this AST audit")
+E       NotImplementedError: Exercise 2: write this AST audit
+
+tests/test_antipatterns.py:45: NotImplementedError
+________________ test_no_integer_literal_iteration_cap_in_loop _________________
+
+    def test_no_integer_literal_iteration_cap_in_loop() -> None:
+        """No `for _ in range(<int literal>)` and no `while <var> < <int literal>` in loop.py.
+    
+        Token/wall-clock/config-sourced budgets are explicitly allowed because they
+        read their cap from a `Budget` instance (an attribute access or a function
+        arg), not from a literal. If you need a cap, pass it in.
+        """
+        # TODO:Walk LOOP_PY's AST. Flag:
+        #   - any ast.For whose iter is `range(<int literal>, ...)`
+        #     (ast.Call to a Name "range" with at least one Constant int arg)
+        #   - any ast.While whose test is an ast.Compare with an int Constant on the right
+        # Assert the offenders list is empty. Mention "use a Budget instead" in the failure
+        # message so the reader sees the recommended fix.
+>       raise NotImplementedError("Exercise 2: write this AST audit")
+E       NotImplementedError: Exercise 2: write this AST audit
+
+tests/test_antipatterns.py:64: NotImplementedError
+_______________________ test_stop_reason_is_loop_control _______________________
+
+    def test_stop_reason_is_loop_control() -> None:
+        """loop.py references `stop_reason` AND a `while` loop exits via return/raise on it."""
+        # TODO:Parse LOOP_PY. Walk the tree:
+        #   1. Assert there is at least one reference to `stop_reason` (either as an
+        #      ast.Attribute named `stop_reason` or an ast.Name named `stop_reason`).
+        #   2. Find every ast.While node. For at least one of them, the unparsed body
+        #      must mention BOTH "stop_reason" AND ("return" OR "raise"). That is what
+        #      "the loop exits on stop_reason" looks like at the AST level.
+        # Fail with a clear message if either condition is missing.
+>       raise NotImplementedError("Exercise 2: write this AST audit")
+E       NotImplementedError: Exercise 2: write this AST audit
+
+tests/test_antipatterns.py:79: NotImplementedError
+_______________ test_no_claim_type_equality_branching_in_package _______________
+
+    def test_no_claim_type_equality_branching_in_package() -> None:
+        """Decision logic about claim type lives in the model, not in Python.
+    
+        tools.py is exempt (it defines the enum in input_schema).
+        pricing.py is exempt (it may map claim_type to per-queue cost weights).
+        """
+        # TODO:Walk every .py file under PKG (recursively). Skip tools.py,
+        # pricing.py, and __init__.py. For each file, parse the AST, find every ast.Compare
+        # whose operators include ast.Eq and whose left operand is a Name/Attribute named
+        # "claim_type" compared against a string Constant. Collect "filename:lineno: <expr>"
+        # for each match. Assert the list is empty; recommend in the failure message that
+        # you move the decision into the model via tool calls.
+>       raise NotImplementedError("Exercise 2: write this AST audit")
+E       NotImplementedError: Exercise 2: write this AST audit
+
+tests/test_antipatterns.py:97: NotImplementedError
+___________________ test_seven_tools_registered_with_schemas ___________________
+
+    def test_seven_tools_registered_with_schemas() -> None:
+        names = {t["name"] for t in TOOL_SCHEMAS}
+>       assert names == {
+            "lookup_policy",
+            "record_claim_fact",
+            "classify_claim",
+            "assess_severity",
+            "request_clarification",
+            "route_to_adjuster",
+            "escalate_to_human",
+        }
+E       AssertionError: assert set() == {'assess_seve...ication', ...}
+E         
+E         Extra items in the right set:
+E         'assess_severity'
+E         'lookup_policy'
+E         'escalate_to_human'
+E         'classify_claim'
+E         'record_claim_fact'...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests/test_tools.py:28: AssertionError
+______________________ test_categorical_fields_use_enums _______________________
+
+    def test_categorical_fields_use_enums() -> None:
+        by_name = {t["name"]: t for t in TOOL_SCHEMAS}
+>       assert by_name["classify_claim"]["input_schema"]["properties"]["claim_type"]["enum"] == CLAIM_TYPES
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'classify_claim'
+
+tests/test_tools.py:45: KeyError
+______________________ test_lookup_policy_returns_record _______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_lookup_policy_returns_rec0')
+
+    def test_lookup_policy_returns_record(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        out = make_executor(s)("lookup_policy", {"policy_id": "POL-1"})
+        payload = json.loads(out)
+>       assert payload["policy_holder"] == "Alex Doe"
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'policy_holder'
+
+tests/test_tools.py:54: KeyError
+_____________ test_lookup_policy_unknown_id_returns_graceful_error _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_lookup_policy_unknown_id_0')
+
+    def test_lookup_policy_unknown_id_returns_graceful_error(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        out = make_executor(s)("lookup_policy", {"policy_id": "POL-MISSING"})
+        err = json.loads(out)
+        assert err["is_error"] is True
+>       assert err["error_category"] == "permanent"
+               ^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'error_category'
+
+tests/test_tools.py:62: KeyError
+___________________ test_unknown_tool_returns_graceful_error ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_unknown_tool_returns_grac0')
+
+    def test_unknown_tool_returns_graceful_error(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        out = make_executor(s)("definitely_not_a_tool", {})
+        err = json.loads(out)
+        assert err["is_error"] is True
+>       assert err["error_category"] == "permanent"
+               ^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'error_category'
+
+tests/test_tools.py:72: KeyError
+______________ test_request_clarification_returns_scripted_reply _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_request_clarification_ret0')
+
+    def test_request_clarification_returns_scripted_reply(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        out = make_executor(s)(
+            "request_clarification",
+            {
+                "question": "Was the bike locked when it was taken?",
+                "ambiguity_between": ["theft", "property_damage"],
+            },
+        )
+        payload = json.loads(out)
+>       assert payload["claimant_reply"] == "yes it was locked"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'claimant_reply'
+
+tests/test_tools.py:85: KeyError
+____________ test_request_clarification_no_response_when_unscripted ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_request_clarification_no_0')
+
+    def test_request_clarification_no_response_when_unscripted(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        out = make_executor(s)(
+            "request_clarification",
+            {
+                "question": "What was the weather like that day?",
+                "ambiguity_between": ["property_damage", "auto"],
+            },
+        )
+        payload = json.loads(out)
+>       assert payload["claimant_reply"] == "NO_RESPONSE"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'claimant_reply'
+
+tests/test_tools.py:99: KeyError
+______________ test_routing_requires_classification_and_severity _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_routing_requires_classifi0')
+
+    def test_routing_requires_classification_and_severity(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        out = make_executor(s)(
+            "route_to_adjuster",
+            {"queue": "property_damage", "claim_summary": "fire damage"},
+        )
+        err = json.loads(out)
+        assert err["is_error"] is True
+>       assert "classify_claim must be called" in err["message"]
+E       AssertionError: assert 'classify_claim must be called' in 'TODO: _err not implemented'
+
+tests/test_tools.py:110: AssertionError
+_________________ test_routing_writes_jsonl_and_marks_terminal _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_routing_writes_jsonl_and_0')
+
+    def test_routing_writes_jsonl_and_marks_terminal(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        exec_ = make_executor(s)
+        exec_("classify_claim", {"claim_type": "property_damage", "confidence": 0.9, "rationale": "fire"})
+        exec_("assess_severity", {"severity": "high", "rationale": "kitchen destroyed"})
+        out = exec_("route_to_adjuster", {"queue": "property_damage", "claim_summary": "kitchen fire"})
+        payload = json.loads(out)
+>       assert payload["routed"] is True
+               ^^^^^^^^^^^^^^^^^
+E       KeyError: 'routed'
+
+tests/test_tools.py:120: KeyError
+_______________ test_escalation_writes_jsonl_and_marks_terminal ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_escalation_writes_jsonl_a0')
+
+    def test_escalation_writes_jsonl_and_marks_terminal(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        exec_ = make_executor(s)
+        out = exec_(
+            "escalate_to_human",
+            {
+                "reason": "unresolved_ambiguity",
+                "structured_summary": {
+                    "policy_id": "POL-1",
+                    "root_cause": "claimant cannot say whether water came from interior plumbing or neighbor's roof",
+                    "candidate_claim_types": ["property_damage", "liability"],
+                    "case_facts": {"location": "basement"},
+                    "recommended_action": "human adjuster site visit",
+                    "confidence": 0.4,
+                },
+            },
+        )
+        payload = json.loads(out)
+>       assert payload["escalated"] is True
+               ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'escalated'
+
+tests/test_tools.py:150: KeyError
+____________________ test_double_terminal_is_graceful_error ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-labsuser/pytest-5/test_double_terminal_is_gracef0')
+
+    def test_double_terminal_is_graceful_error(tmp_path: Path) -> None:
+        s = _session(tmp_path)
+        exec_ = make_executor(s)
+        exec_("classify_claim", {"claim_type": "theft", "confidence": 0.95, "rationale": "stolen"})
+        exec_("assess_severity", {"severity": "low", "rationale": "low value"})
+        exec_("route_to_adjuster", {"queue": "theft", "claim_summary": "bike theft"})
+        out = exec_(
+            "escalate_to_human",
+            {
+                "reason": "other",
+                "structured_summary": {
+                    "policy_id": "POL-1",
+                    "root_cause": "x",
+                    "candidate_claim_types": ["theft"],
+                    "case_facts": {},
+                    "recommended_action": "x",
+                    "confidence": 0.5,
+                },
+            },
+        )
+        err = json.loads(out)
+        assert err["is_error"] is True
+>       assert "already called" in err["message"]
+E       AssertionError: assert 'already called' in 'TODO: _err not implemented'
+
+tests/test_tools.py:182: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_antipatterns.py::test_no_string_membership_against_text_in_loop
+FAILED tests/test_antipatterns.py::test_no_integer_literal_iteration_cap_in_loop
+FAILED tests/test_antipatterns.py::test_stop_reason_is_loop_control - NotImpl...
+FAILED tests/test_antipatterns.py::test_no_claim_type_equality_branching_in_package
+FAILED tests/test_tools.py::test_seven_tools_registered_with_schemas - Assert...
+FAILED tests/test_tools.py::test_categorical_fields_use_enums - KeyError: 'cl...
+FAILED tests/test_tools.py::test_lookup_policy_returns_record - KeyError: 'po...
+FAILED tests/test_tools.py::test_lookup_policy_unknown_id_returns_graceful_error
+FAILED tests/test_tools.py::test_unknown_tool_returns_graceful_error - KeyErr...
+FAILED tests/test_tools.py::test_request_clarification_returns_scripted_reply
+FAILED tests/test_tools.py::test_request_clarification_no_response_when_unscripted
+FAILED tests/test_tools.py::test_routing_requires_classification_and_severity
+FAILED tests/test_tools.py::test_routing_writes_jsonl_and_marks_terminal - Ke...
+FAILED tests/test_tools.py::test_escalation_writes_jsonl_and_marks_terminal
+FAILED tests/test_tools.py::test_double_terminal_is_graceful_error - Assertio...
+======================== 15 failed, 14 passed in 0.48s =========================

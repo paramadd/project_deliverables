@@ -1,0 +1,221 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0 -- /voc/work/py3.13-exercises-and-project/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/01-loop/solution/.venv/bin/python3.13
+cachedir: .pytest_cache
+rootdir: /voc/work/py3.13-exercises-and-project/Engineer a Long-Conversation Context Strategy for a Retail Support Copilot/01-prune-tool-output/solution
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 30 items
+
+tests/test_antipatterns.py::test_pruner_has_no_anthropic_import PASSED   [  3%]
+tests/test_antipatterns.py::test_only_tokens_module_uses_count_tokens_or_heuristic PASSED [  6%]
+tests/test_antipatterns.py::test_assemble_module_section_order_contract PASSED [ 10%]
+tests/test_antipatterns.py::test_assembled_context_active_segment_byte_exact SKIPPED [ 13%]
+tests/test_antipatterns.py::test_budget_json_section_counts_sum_consistently SKIPPED [ 16%]
+tests/test_assemble.py::test_assemble_section_order_exact FAILED         [ 20%]
+tests/test_assemble.py::test_active_segment_byte_exact FAILED            [ 23%]
+tests/test_assemble.py::test_no_interleaving_of_resolved_and_active FAILED [ 26%]
+tests/test_case_facts.py::test_required_fields_has_12_entries FAILED     [ 30%]
+tests/test_case_facts.py::test_required_fields_cover_three_issues FAILED [ 33%]
+tests/test_case_facts.py::test_case_facts_dataclass_has_required_fields PASSED [ 36%]
+tests/test_case_facts.py::test_to_markdown_uses_top_level_header_and_fixed_key_order FAILED [ 40%]
+tests/test_case_facts.py::test_extraction_error_lists_missing_fields PASSED [ 43%]
+tests/test_compressor.py::test_summary_dataclass_carries_token_counts PASSED [ 46%]
+tests/test_compressor.py::test_compressed_dataclass_carries_active_text_and_id PASSED [ 50%]
+tests/test_compressor.py::test_summarize_segment_refuses_to_compress_the_active_segment FAILED [ 53%]
+tests/test_compressor.py::test_compression_prompt_is_committed_and_nontrivial PASSED [ 56%]
+tests/test_pruner.py::test_lookup_order_fixture_has_at_least_40_fields PASSED [ 60%]
+tests/test_pruner.py::test_pruner_keeps_exactly_the_contracted_set PASSED [ 63%]
+tests/test_pruner.py::test_pruned_output_under_200_tokens PASSED         [ 66%]
+tests/test_pruner.py::test_pruner_raises_on_missing_required_field PASSED [ 70%]
+tests/test_tokens.py::test_count_zero_for_empty_string PASSED            [ 73%]
+tests/test_tokens.py::test_count_returns_positive_int_for_nonempty_text PASSED [ 76%]
+tests/test_tokens.py::test_count_grows_with_length PASSED                [ 80%]
+tests/test_tokens.py::test_methodology_returns_descriptive_string PASSED [ 83%]
+tests/test_transcript.py::test_transcript_loader_turn_count PASSED       [ 86%]
+tests/test_transcript.py::test_transcript_loader_partition_boundaries PASSED [ 90%]
+tests/test_transcript.py::test_transcript_loader_token_count_in_engineered_range PASSED [ 93%]
+tests/test_transcript.py::test_active_turns_accessor PASSED              [ 96%]
+tests/test_transcript.py::test_canonical_token_function_is_used_everywhere PASSED [100%]
+
+=================================== FAILURES ===================================
+______________________ test_assemble_section_order_exact _______________________
+
+    def test_assemble_section_order_exact():
+        """Exact section header sequence."""
+>       assembled = build(_fake_facts(), _fake_compressed())
+                          ^^^^^^^^^^^^^
+
+tests/test_assemble.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _fake_facts() -> CaseFacts:
+>       return CaseFacts(
+            customer_id="CUST-88421",
+            refund_order_id="ORD-77310",
+            refund_amount_usd=48.99,
+            refund_status="processed",
+            subscription_id="SUB-22119",
+            subscription_plan="Pantry Plus Monthly",
+            subscription_cancel_reason="duplicate_charge",
+            subscription_status="cancelled_with_prorated_refund",
+            active_payment_method_last4="4242",
+            new_payment_method_last4="7782",
+            payment_update_failure_code="AVS_MISMATCH",
+            payment_update_status="in_progress",
+        )
+E       TypeError: CaseFacts.__init__() got an unexpected keyword argument 'customer_id'
+
+tests/test_assemble.py:10: TypeError
+________________________ test_active_segment_byte_exact ________________________
+
+    def test_active_segment_byte_exact():
+        """Active section body is byte-exact equal to active_text."""
+        compressed = _fake_compressed()
+>       assembled = build(_fake_facts(), compressed)
+                          ^^^^^^^^^^^^^
+
+tests/test_assemble.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _fake_facts() -> CaseFacts:
+>       return CaseFacts(
+            customer_id="CUST-88421",
+            refund_order_id="ORD-77310",
+            refund_amount_usd=48.99,
+            refund_status="processed",
+            subscription_id="SUB-22119",
+            subscription_plan="Pantry Plus Monthly",
+            subscription_cancel_reason="duplicate_charge",
+            subscription_status="cancelled_with_prorated_refund",
+            active_payment_method_last4="4242",
+            new_payment_method_last4="7782",
+            payment_update_failure_code="AVS_MISMATCH",
+            payment_update_status="in_progress",
+        )
+E       TypeError: CaseFacts.__init__() got an unexpected keyword argument 'customer_id'
+
+tests/test_assemble.py:10: TypeError
+_________________ test_no_interleaving_of_resolved_and_active __________________
+
+    def test_no_interleaving_of_resolved_and_active():
+        """Section boundaries are exclusive."""
+>       assembled = build(_fake_facts(), _fake_compressed())
+                          ^^^^^^^^^^^^^
+
+tests/test_assemble.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _fake_facts() -> CaseFacts:
+>       return CaseFacts(
+            customer_id="CUST-88421",
+            refund_order_id="ORD-77310",
+            refund_amount_usd=48.99,
+            refund_status="processed",
+            subscription_id="SUB-22119",
+            subscription_plan="Pantry Plus Monthly",
+            subscription_cancel_reason="duplicate_charge",
+            subscription_status="cancelled_with_prorated_refund",
+            active_payment_method_last4="4242",
+            new_payment_method_last4="7782",
+            payment_update_failure_code="AVS_MISMATCH",
+            payment_update_status="in_progress",
+        )
+E       TypeError: CaseFacts.__init__() got an unexpected keyword argument 'customer_id'
+
+tests/test_assemble.py:10: TypeError
+_____________________ test_required_fields_has_12_entries ______________________
+
+    def test_required_fields_has_12_entries():
+>       assert len(REQUIRED_FIELDS) == 12
+E       assert 0 == 12
+E        +  where 0 = len(())
+
+tests/test_case_facts.py:19: AssertionError
+___________________ test_required_fields_cover_three_issues ____________________
+
+    def test_required_fields_cover_three_issues():
+        # Three issue groups must be represented so the case-facts block can
+        # carry a fact for every issue type the transcript spans.
+>       assert "customer_id" in REQUIRED_FIELDS
+E       AssertionError: assert 'customer_id' in ()
+
+tests/test_case_facts.py:25: AssertionError
+__________ test_to_markdown_uses_top_level_header_and_fixed_key_order __________
+
+    def test_to_markdown_uses_top_level_header_and_fixed_key_order():
+>       md = _sample_facts().to_markdown()
+             ^^^^^^^^^^^^^^^
+
+tests/test_case_facts.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _sample_facts() -> CaseFacts:
+>       return CaseFacts(
+            customer_id="CUST-88421",
+            refund_order_id="ORD-77310",
+            refund_amount_usd=22.14,
+            refund_status="processed",
+            subscription_id="SUB-22119",
+            subscription_plan="Pantry Plus Monthly",
+            subscription_cancel_reason="duplicate_charge",
+            subscription_status="cancelled_with_prorated_refund",
+            active_payment_method_last4="4242",
+            new_payment_method_last4="7782",
+            payment_update_failure_code="AVS_MISMATCH",
+            payment_update_status="in_progress",
+        )
+E       TypeError: CaseFacts.__init__() got an unexpected keyword argument 'customer_id'
+
+tests/test_case_facts.py:37: TypeError
+________ test_summarize_segment_refuses_to_compress_the_active_segment _________
+
+    def test_summarize_segment_refuses_to_compress_the_active_segment():
+        """The active segment must be preserved byte-exact — never summarized."""
+        active = Segment(
+            issue_id="payment_update",
+            turns=[Turn(turn=29, role="customer", text="hi", issue_id="payment_update")],
+            status="active",
+        )
+        with pytest.raises(ValueError, match="resolved"):
+>           summarize_segment(active)
+
+tests/test_compressor.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+segment = Segment(issue_id='payment_update', turns=[Turn(turn=29, role='customer', text='hi', issue_id='payment_update')], status='active')
+model = None
+
+    def summarize_segment(segment: Segment, *, model: str | None = None) -> Summary:
+        # TODO (Exercise 3): Summarize ONE resolved segment via a single Claude call.
+        #
+        # 1. Guard. Refuse to summarize anything whose status is not "resolved".
+        #    Raise ValueError naming the issue_id and status and stating explicitly
+        #    that only resolved segments are compressed — the active segment must be
+        #    preserved byte-exact.
+        #
+        # 2. Load the compression prompt template via _load_prompt(). This is the
+        #    system message for the Claude call.
+        #
+        # 3. Build the user message naming the issue_id and turn range so the model
+        #    knows where the segment sits in the transcript:
+        #        f"Source segment — issue_id `{segment.issue_id}`, turns "
+        #        f"{segment.turn_range[0]}-{segment.turn_range[1]}:\n\n{segment.text}"
+        #
+        # 4. Call complete_with_system(system, user, model=model, max_tokens=2048).
+        #    It returns a (text, input_tokens, output_tokens) tuple.
+        #
+        # 5. Return a Summary carrying the issue_id, the response text (the
+        #    structured summary), and the token counts.
+>       raise NotImplementedError("Exercise 3: implement segment summarization")
+E       NotImplementedError: Exercise 3: implement segment summarization
+
+retail_context/compressor.py:58: NotImplementedError
+=========================== short test summary info ============================
+FAILED tests/test_assemble.py::test_assemble_section_order_exact - TypeError:...
+FAILED tests/test_assemble.py::test_active_segment_byte_exact - TypeError: Ca...
+FAILED tests/test_assemble.py::test_no_interleaving_of_resolved_and_active - ...
+FAILED tests/test_case_facts.py::test_required_fields_has_12_entries - assert...
+FAILED tests/test_case_facts.py::test_required_fields_cover_three_issues - As...
+FAILED tests/test_case_facts.py::test_to_markdown_uses_top_level_header_and_fixed_key_order
+FAILED tests/test_compressor.py::test_summarize_segment_refuses_to_compress_the_active_segment
+=================== 7 failed, 21 passed, 2 skipped in 3.89s ====================

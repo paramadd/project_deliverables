@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0 -- /voc/work/py3.13-exercises-and-project/Build a Claims Intake Agent with a stop_reason-Driven Loop/exercises/01-loop/solution/.venv/bin/python3.13
+cachedir: .pytest_cache
+rootdir: /voc/work/py3.13-exercises-and-project/Build a Multi-Shift Quality Monitoring System with Claude Orchestration/02-invocation-pipeline/solution
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 15 items
+
+tests/test_us01_tiered_state.py::test_hotstate_roundtrip_and_size_budget PASSED [  6%]
+tests/test_us01_tiered_state.py::test_hotstate_rejects_more_than_20_hashes PASSED [ 13%]
+tests/test_us01_tiered_state.py::test_hotstate_atomic_write PASSED       [ 20%]
+tests/test_us01_tiered_state.py::test_warmstore_creates_table_and_index PASSED [ 26%]
+tests/test_us01_tiered_state.py::test_warmstore_insert_many_roundtrips PASSED [ 33%]
+tests/test_us01_tiered_state.py::test_coldstore_writes_monthly_summary PASSED [ 40%]
+tests/test_us01_tiered_state.py::test_coldstore_handles_empty_month PASSED [ 46%]
+tests/test_us01_tiered_state.py::test_defects_since_uses_index_and_does_not_load_full_table PASSED [ 53%]
+tests/test_us01_tiered_state.py::test_defects_since_respects_limit PASSED [ 60%]
+tests/test_us02_invocation_pipeline.py::test_gather_new_defects_is_pure_passthrough_to_sql PASSED [ 66%]
+tests/test_us02_invocation_pipeline.py::test_gather_new_defects_has_no_python_side_filtering PASSED [ 73%]
+tests/test_us02_invocation_pipeline.py::test_invocation_shapes_are_distinct PASSED [ 80%]
+tests/test_us02_invocation_pipeline.py::test_build_rich_prompt_stays_under_4000_chars PASSED [ 86%]
+tests/test_us02_invocation_pipeline.py::test_run_shift_invokes_client_exactly_once_and_writes_state PASSED [ 93%]
+tests/test_us02_invocation_pipeline.py::test_run_shift_cli_entry_point_works PASSED [100%]
+
+============================== 15 passed in 1.29s ==============================
